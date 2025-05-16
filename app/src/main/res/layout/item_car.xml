@@ -62,6 +62,16 @@
                 android:textSize="18sp"
                 android:layout_marginTop="8dp" />
 
+            <!-- Ekleyen Kisi -->
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ekleyen: "
+                android:textColor="@color/accentGreen"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
+
             <!-- Silme Butonu -->
             <ImageButton
                 android:id="@+id/btnDelete"

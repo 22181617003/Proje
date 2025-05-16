@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.proje.DB.CarDatabaseHelper;
 import com.example.proje.Model.Car;
+import com.example.proje.SessionManager.SessionManager;
 import com.example.proje.ViewModel.CarViewModel;
 import com.example.proje.databinding.FragmentAddCarBinding;
 
@@ -20,6 +21,7 @@ public class AddCarFragment extends Fragment {
     private FragmentAddCarBinding binding;
     private CarDatabaseHelper dbHelper;
     private CarViewModel carViewModel;
+    private SessionManager sessionManager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -30,21 +32,24 @@ public class AddCarFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         carViewModel = new ViewModelProvider(requireActivity()).get(CarViewModel.class);
+        sessionManager = new SessionManager(requireContext());
 
         binding.btnSave.setOnClickListener(v -> {
             String brand = binding.edtBrand.getText().toString().trim();
             String model = binding.edtModel.getText().toString().trim();
             String yearStr = binding.edtYear.getText().toString().trim();
             String priceStr = binding.edtPrice.getText().toString().trim();
+            String name = sessionManager.getUsername();
 
             if (brand.isEmpty() || model.isEmpty() || yearStr.isEmpty() || priceStr.isEmpty()){
                 Toast.makeText(getContext(), "Lütfen tüm alanları doldurunuz!!", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             int year = Integer.parseInt(yearStr);
             double price = Double.parseDouble(priceStr);
 
-            Car car = new Car(brand, model, year, price);
+            Car car = new Car(brand, model, year, price, name);
             carViewModel.addCar(car);
 
             Toast.makeText(getContext(), "Araç başarıyla kaydedildi!!", Toast.LENGTH_SHORT).show();

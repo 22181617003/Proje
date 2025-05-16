@@ -1,6 +1,7 @@
 package com.example.proje.Adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,10 @@ import java.util.List;
 public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
     private final List<Car> carList = new ArrayList<>();
     private OnDeleteClickListener deleteClickListener;
+    private String currentUserName = "";
+    public void setCurrentUserName(String name) {
+        this.currentUserName = name;
+    }
 
 
     public void setCarList(List<Car> newList){
@@ -31,17 +36,23 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
             this.binding = binding;
         }
 
-        public void bind(Car car, OnDeleteClickListener deleteClickListener) {
+        public void bind(Car car, OnDeleteClickListener deleteClickListener, String currentUserName) {
             binding.txtBrand.setText(car.getBrand());
             binding.txtModel.setText(car.getModel());
             binding.txtYear.setText(String.valueOf(car.getYear()));
             binding.txtPrice.setText(String.format("%.2f TL", car.getPrice()));
+            binding.txtName.setText(car.getName());
 
-            binding.btnDelete.setOnClickListener(v -> {
-                if (deleteClickListener != null) {
-                    deleteClickListener.onDeleteClick(car);
-                }
-            });
+            if (car.getName().equals(currentUserName)) {
+                binding.btnDelete.setVisibility(View.VISIBLE); // Butonu göster
+                binding.btnDelete.setOnClickListener(v -> {
+                    if (deleteClickListener != null) {
+                        deleteClickListener.onDeleteClick(car);
+                    }
+                });
+            } else {
+                binding.btnDelete.setVisibility(View.GONE); // Başkasına aitse gizle
+            }
         }
     }
 
@@ -54,7 +65,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CarViewHolder holder, int position) {
-        holder.bind(carList.get(position), deleteClickListener);
+        holder.bind(carList.get(position), deleteClickListener, currentUserName);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class CarDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_MODEL = "model";
     private static final String COLUMN_YEAR = "year";
     private static final String COLUMN_PRICE = "price";
+    private static final String COLUMN_USERNAME = "name";
 
     public CarDatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,7 +36,8 @@ public class CarDatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_BRAND + " TEXT, "
                 + COLUMN_MODEL + " TEXT, "
                 + COLUMN_YEAR + " INTEGER, "
-                + COLUMN_PRICE + " REAL)";
+                + COLUMN_PRICE + " REAL,"
+                + COLUMN_USERNAME + " TEXT) ";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -52,6 +54,7 @@ public class CarDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_MODEL, car.getModel());
         values.put(COLUMN_YEAR, car.getYear());
         values.put(COLUMN_PRICE, car.getPrice());
+        values.put(COLUMN_USERNAME, car.getName());
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
@@ -68,7 +71,8 @@ public class CarDatabaseHelper extends SQLiteOpenHelper {
                 String model = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MODEL));
                 int year = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_YEAR));
                 double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE));
-                Car car = new Car(id, brand, model, year, price);
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USERNAME));
+                Car car = new Car(id, brand, model, year, price, name);
                 carList.add(car);
             }while (cursor.moveToNext());
         }
